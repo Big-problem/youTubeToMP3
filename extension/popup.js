@@ -1,5 +1,4 @@
-const API_BASE = "https://youtubetomp3-cfey.onrender.com/api";
-// const API_BASE = "http://localhost:5000/api";
+const API_BASE = "http://localhost:5000/api";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const urlInput = document.getElementById("url");
@@ -70,18 +69,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else if (data.status === "completed") {
           clearInterval(timer);
           progressBar.style.width = "100%";
-          statusText.innerText = "轉檔完成！準備觸發下載...";
-
-          // 4. 呼叫 Chrome 原生下載 API
-          chrome.downloads.download({
-            url: `${API_BASE}/download/${taskId}`,
-            filename: data.file_name
-          });
-
-          setTimeout(() => {
-            statusText.innerText = "下載完畢！";
-            convertBtn.disabled = false;
-          }, 2000);
+          statusText.innerText = "轉檔完成！已自動存入「下載」資料夾";
+          convertBtn.disabled = false;
         } else if (data.status === "failed") {
           clearInterval(timer);
           statusText.innerText = "轉檔失敗：" + (data.error || "未知錯誤");
@@ -92,6 +81,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         statusText.innerText = "通訊失敗：" + err.message;
         convertBtn.disabled = false;
       }
-    }, 5000); // 每 5 秒查詢一次
+    }, 1500); // 每 1.5 秒查詢一次
   }
 });
