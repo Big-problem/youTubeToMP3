@@ -91,6 +91,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         statusText.innerText = "通訊失敗：" + err.message;
         convertBtn.disabled = false;
       }
-    }, 2000); // 每 2 秒查詢一次
+    }, 5000); // 每 5 秒查詢一次
   }
 });

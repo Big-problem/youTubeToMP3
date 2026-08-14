@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import yt_dlp
+import shutil
 
 def get_windows_download_dir():
   try:
@@ -25,7 +26,21 @@ def get_windows_download_dir():
   # 若抓取失敗則使用預設 WSL 目錄
   return os.path.join(os.getcwd(), "downloads")
 
-cookie_path = '/etc/secrets/cookies.txt' if os.path.exists('/etc/secrets/cookies.txt') else 'cookies.txt'
+def get_valid_cookie_path():
+    secret_cookie = '/etc/secrets/cookies.txt'
+    writable_cookie = '/tmp/cookies.txt'
+    local_cookie = 'cookies.txt'
+
+    # 如果是 Render 雲端環境
+    if os.path.exists(secret_cookie):
+        # 將唯讀的 /etc/secrets/cookies.txt 複製到可讀寫的 /tmp/cookies.txt
+        shutil.copyfile(secret_cookie, writable_cookie)
+        return writable_cookie
+    # 如果是本機測試環境
+    elif os.path.exists(local_cookie):
+        return local_cookie
+    
+    return None
 
 app = FastAPI(title="YouTube to MP3 Backend API")
 
@@ -73,7 +88,7 @@ def progress_hook(d, task_id: str):
 def process_download(task_id: str, url: str, quality: str):
   ydl_opts = {
       'format': 'bestaudio/best',
-      'cookiefile': cookie_path if os.path.exists(cookie_path) else None,
+      'cookiefile': get_valid_cookie_path(),
       'postprocessors': [
           {
               'key': 'FFmpegExtractAudio',
