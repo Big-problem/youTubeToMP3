@@ -8,6 +8,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     nodejs \
+    && ln -sf /usr/bin/nodejs /usr/bin/node \
     && rm -rf /var/lib/apt/lists/*
 
 # 4. 設定容器內的工作目錄

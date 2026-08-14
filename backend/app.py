@@ -99,7 +99,7 @@ def process_download(task_id: str, url: str, quality: str):
       ],
       'outtmpl': os.path.join(DOWNLOAD_DIR, '%(title)s.%(ext)s'),
       'progress_hooks': [lambda d: progress_hook(d, task_id)],
-      'js_runtimes': {'node': {}},
+      'js_runtimes': ['node', 'nodejs'],
       'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
       'quiet': True,
   }
