@@ -25,6 +25,8 @@ def get_windows_download_dir():
   # 若抓取失敗則使用預設 WSL 目錄
   return os.path.join(os.getcwd(), "downloads")
 
+cookie_path = '/etc/secrets/cookies.txt' if os.path.exists('/etc/secrets/cookies.txt') else 'cookies.txt'
+
 app = FastAPI(title="YouTube to MP3 Backend API")
 
 # 1. 允許 Windows 端 Chrome 跨域呼叫 (CORS)
@@ -71,6 +73,7 @@ def progress_hook(d, task_id: str):
 def process_download(task_id: str, url: str, quality: str):
   ydl_opts = {
       'format': 'bestaudio/best',
+      'cookiefile': cookie_path if os.path.exists(cookie_path) else None,
       'postprocessors': [
           {
               'key': 'FFmpegExtractAudio',

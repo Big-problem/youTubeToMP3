@@ -9,7 +9,7 @@
     "downloads"
   ],
   "host_permissions": [
-    "http://localhost:5000/*"
+    "https://youtubetomp3-cfey.onrender.com/*"
   ],
   "action": {
     "default_popup": "popup.html"
