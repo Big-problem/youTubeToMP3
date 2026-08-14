@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h3>🎵 YouTube MP3 轉檔器</h3>
+  
+  <div class="form-group">
+    <label for="url">YouTube 網址</label>
+    <input type="text" id="url" placeholder="自動抓取中..." />
+  </div>
+
+  <div class="form-group">
+    <label for="quality">選擇音質</label>
+    <select id="quality">
+      <option value="320">320 kbps (最高音質)</option>
+      <option value="192" selected>192 kbps (標準推薦)</option>
+      <option value="128">128 kbps (省空間)</option>
+    </select>
+  </div>
+
+  <button id="convert-btn">開始轉檔並下載</button>
+
+  <div id="progress-container">
+    <div class="progress-bar-bg">
+      <div id="progress-bar" class="progress-bar-fill"></div>
+    </div>
+    <div id="status-text">準備中...</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
