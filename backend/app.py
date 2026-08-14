@@ -26,22 +26,6 @@ def get_windows_download_dir():
   # 若抓取失敗則使用預設 WSL 目錄
   return os.path.join(os.getcwd(), "downloads")
 
-def get_valid_cookie_path():
-    secret_cookie = '/etc/secrets/cookies.txt'
-    writable_cookie = '/tmp/cookies.txt'
-    local_cookie = 'cookies.txt'
-
-    # 如果是 Render 雲端環境
-    if os.path.exists(secret_cookie):
-        # 將唯讀的 /etc/secrets/cookies.txt 複製到可讀寫的 /tmp/cookies.txt
-        shutil.copyfile(secret_cookie, writable_cookie)
-        return writable_cookie
-    # 如果是本機測試環境
-    elif os.path.exists(local_cookie):
-        return local_cookie
-    
-    return None
-
 app = FastAPI(title="YouTube to MP3 Backend API")
 
 # 1. 允許 Windows 端 Chrome 跨域呼叫 (CORS)
@@ -88,7 +72,6 @@ def progress_hook(d, task_id: str):
 def process_download(task_id: str, url: str, quality: str):
   ydl_opts = {
       'format': 'bestaudio/best',
-      'cookiefile': get_valid_cookie_path(),
       'postprocessors': [
           {
               'key': 'FFmpegExtractAudio',
@@ -100,7 +83,7 @@ def process_download(task_id: str, url: str, quality: str):
       'outtmpl': os.path.join(DOWNLOAD_DIR, '%(title)s.%(ext)s'),
       'progress_hooks': [lambda d: progress_hook(d, task_id)],
       'js_runtimes': {'node': {}},
-      'extractor_args': {'youtube': {'player_client': ['mweb', 'android', 'web']}},
+      'extractor_args': {'youtube': {'player_client': ['android', 'web']}},
       'quiet': True,
   }
 
