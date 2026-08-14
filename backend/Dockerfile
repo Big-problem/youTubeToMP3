@@ -6,9 +6,10 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # 3. 安裝系統層級套件：FFmpeg 與 Node.js
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     ffmpeg \
     nodejs \
-    && ln -sf /usr/bin/nodejs /usr/bin/node \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # 4. 設定容器內的工作目錄
